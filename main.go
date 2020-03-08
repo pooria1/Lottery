@@ -5,50 +5,93 @@ import (
 	"math/rand"
 )
 
-type balls []string
+type balls map[string]int
 
-//getNumBalls func calculate point of a ball with "color" color
+//addBall func will add n balls with c color to the collection
 
-func (b *balls) getNumBalls(color string) int {
-	ans := 0
-	for _, v := range *b {
-		if v == color {
-			ans++
+func addBall(b balls) {
+
+	fmt.Println("enter color of balls you want add: ")
+	var c string
+	var n int
+	fmt.Print("ball: ")
+	fmt.Scanf("%s", &c)
+	fmt.Print("number: ")
+	fmt.Scanf("%d", &n)
+	b[c] += n
+
+}
+
+//addBall func will remove n balls with c color from the collection.
+//this func returns a boolean. It is true if balls successfully removed and false if not removed.
+
+func removeBall(b balls) bool {
+	fmt.Println("enter color of balls you want remove: ")
+	var c string
+	var n int
+	fmt.Print("ball: ")
+	fmt.Scanf("%s", &c)
+	fmt.Print("number: ")
+	fmt.Scanf("%d", &n)
+	isRemoved := false
+	for key, value := range b {
+		if key == c && value >= n && n >= 0 {
+			b[c] -= n
+			if b[c] == 0 {
+				delete(b, c)
+			}
+			isRemoved = true
+			break
 		}
 	}
-	return ans
+	if isRemoved == false {
+		fmt.Println("can't remove")
+	}
+	return isRemoved
+}
+
+//getRandBall func will return color of random ball. This func will calculate a number
+//between 1 and number of balls then will find which ball is that then return its color.
+
+func getRandBall(b balls) {
+
+	totalBalls := 0
+	for _, v := range b {
+		totalBalls += v
+	}
+
+	randBallNum := rand.Intn(totalBalls) + 1
+	var randBall string
+
+	for key, value := range b {
+		if randBallNum <= value {
+			randBall = key
+		}
+		randBallNum -= value
+	}
+	fmt.Println("Random ball is", randBall, "with", b[randBall], "points.")
+	b[randBall]--
 }
 
 func main() {
 
-	var b balls
+	b := make(map[string]int)
 
 	for {
-		fmt.Println("[1] Add ball\n[2] quit")
+		fmt.Println("[1] Add ball\n[2] Remove ball\n[other] quit")
 		var choice int
 		fmt.Scanf("%d", &choice)
 
 		if choice == 1 {
 
-			//here we will get the balls and add them in collection
+			addBall(b)
+			getRandBall(b)
 
-			fmt.Println("enter color of balls you want add(type 0 to finish adding and get a random ball): ")
-			var c string
-			for i := 1; ; i++ {
-				fmt.Printf("ball %d: ", i)
-				fmt.Scanf("%s", &c)
-				if c == "0" {
-					break
-				}
-				b = append(b, c)
+		} else if choice == 2 {
+			isRemoved := removeBall(b)
+			if isRemoved {
+				getRandBall(b)
 			}
-
-			//now we will return a random ball with its point and remove that from collection
-
-			i := rand.Intn(len(b))
-			fmt.Println("Random ball is", b[i], "with", b.getNumBalls(b[i]), "points.")
-			b = append(b[0:i], b[i+1:len(b)]...)
-
 		} else {
 			return
 		}
