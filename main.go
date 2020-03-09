@@ -53,7 +53,7 @@ func removeBall(b balls) bool {
 //getRandBall func will return color of random ball. This func will calculate a number
 //between 1 and number of balls then will find which ball is that then return its color.
 
-func getRandBall(b balls) {
+func getRandBall(b balls) string {
 
 	totalBalls := 0
 	for _, v := range b {
@@ -71,6 +71,7 @@ func getRandBall(b balls) {
 	}
 	fmt.Println("Random ball is", randBall, "with", b[randBall], "points.")
 	b[randBall]--
+	return randBall
 }
 
 func main() {
