@@ -66,11 +66,15 @@ func getRandBall(b balls) string {
 	for key, value := range b {
 		if randBallNum <= value {
 			randBall = key
+			break
 		}
 		randBallNum -= value
 	}
 	fmt.Println("Random ball is", randBall, "with", b[randBall], "points.")
 	b[randBall]--
+	if b[randBall] == 0 {
+		delete(b, randBall)
+	}
 	return randBall
 }
 
@@ -79,20 +83,20 @@ func main() {
 	b := make(map[string]int)
 
 	for {
-		fmt.Println("[1] Add ball\n[2] Remove ball\n[other] quit")
+		fmt.Println("\n[1] Add ball\n[2] Remove ball\n[3]get random ball\n[other] quit")
 		var choice int
 		fmt.Scanf("%d", &choice)
 
 		if choice == 1 {
 
 			addBall(b)
-			getRandBall(b)
 
 		} else if choice == 2 {
 			isRemoved := removeBall(b)
 			if isRemoved {
-				getRandBall(b)
 			}
+		} else if choice == 3 {
+			getRandBall(b)
 		} else {
 			return
 		}
