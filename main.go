@@ -5,11 +5,9 @@ import (
 	"math/rand"
 )
 
-type balls map[string]int
-
 //addBall func will add n balls with c color to the collection
 
-func addBall(b balls) {
+func addBall(b map[string]int) {
 
 	fmt.Println("enter color of balls you want add: ")
 	var c string
@@ -22,10 +20,10 @@ func addBall(b balls) {
 
 }
 
-//addBall func will remove n balls with c color from the collection.
+//removeBall func will remove n balls with c color from the collection.
 //this func returns a boolean. It is true if balls successfully removed and false if not removed.
 
-func removeBall(b balls) bool {
+func removeBall(b map[string]int) bool {
 	fmt.Println("enter color of balls you want remove: ")
 	var c string
 	var n int
@@ -33,27 +31,23 @@ func removeBall(b balls) bool {
 	fmt.Scanf("%s", &c)
 	fmt.Print("number: ")
 	fmt.Scanf("%d", &n)
-	isRemoved := false
-	for key, value := range b {
-		if key == c && value >= n && n >= 0 {
-			b[c] -= n
-			if b[c] == 0 {
-				delete(b, c)
-			}
-			isRemoved = true
-			break
+
+	if b[c] >= n {
+		b[c] -= n
+		if b[c] == 0 {
+			delete(b, c)
 		}
+		return true
 	}
-	if isRemoved == false {
-		fmt.Println("can't remove")
-	}
-	return isRemoved
+
+	fmt.Println("can't remove")
+	return false
 }
 
 //getRandBall func will return color of random ball. This func will calculate a number
 //between 1 and number of balls then will find which ball is that then return its color.
 
-func getRandBall(b balls) string {
+func getRandBall(b map[string]int) string {
 
 	totalBalls := 0
 	for _, v := range b {
@@ -83,21 +77,18 @@ func main() {
 	b := make(map[string]int)
 
 	for {
-		fmt.Println("\n[1] Add ball\n[2] Remove ball\n[3]get random ball\n[other] quit")
+		fmt.Println("\n[1] Add ball\n[2] Remove ball\n[3] get random ball\n[other] quit")
 		var choice int
 		fmt.Scanf("%d", &choice)
 
-		if choice == 1 {
-
+		switch choice {
+		case 1:
 			addBall(b)
-
-		} else if choice == 2 {
-			isRemoved := removeBall(b)
-			if isRemoved {
-			}
-		} else if choice == 3 {
+		case 2:
+			removeBall(b)
+		case 3:
 			getRandBall(b)
-		} else {
+		default:
 			return
 		}
 	}
