@@ -54,6 +54,11 @@ func getRandBall(b map[string]int) string {
 		totalBalls += v
 	}
 
+	if totalBalls == 0 {
+		fmt.Println("there is no ball to select a random")
+		return ""
+	}
+
 	randBallNum := rand.Intn(totalBalls) + 1
 	var randBall string
 
